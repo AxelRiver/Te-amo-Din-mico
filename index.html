@@ -1,235 +1,551 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Te amo - Te Amo</title>
-  <meta name="author" content="zero">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Para mi estrellita ✨</title>
 
-  <!-- mo.js desde CDN -->
-  <script src="https://cdn.jsdelivr.net/mojs/latest/mo.min.js"></script>
+    <meta name="theme-color" content="#0f0c29">
+    <link rel="manifest" href="manifest.json">
 
-  <style>
-    *, *:before, *:after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 30%, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff8e1;
+            cursor: none;
+        }
+        #particles-js, #corazones-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        #letra-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        #mensaje-pequeno {
+            position: absolute;
+            left: 50%;
+            top: 82%;
+            transform: translateX(-50%);
+            font-size: clamp(1.1rem, 4vw, 1.8rem);
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255,105,180,0.8);
+            opacity: 0;
+            transition: opacity 2s ease, transform 3s ease;
+            z-index: 4;
+            pointer-events: none;
+            letter-spacing: 1px;
+        }
+        #play-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(255,105,180,0.15);
+            border: 1px solid rgba(255,182,193,0.4);
+            color: #ffd1dc;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            transition: all 0.4s;
+            opacity: 0.85;
+        }
+        #play-btn:hover {
+            background: rgba(255,105,180,0.35);
+            transform: translateX(-50%) scale(1.08);
+            box-shadow: 0 0 25px rgba(255,105,180,0.6);
+        }
 
-    html, body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #66eedc;
-      font-size: 62.5%;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-
-    @media screen and (max-width: 520px) {
-      /* mojs no maneja bien rem en móviles a veces */
-    }
-
-    .container {
-      width: 50rem;
-      height: 20rem;
-      position: relative;
-    }
-
-    .svg-container {
-      z-index: 2;
-      position: absolute;
-    }
-
-    .mo-container {
-      width: 100%;
-      height: 100%;
-    }
-
-    .line {
-      fill: none;
-      stroke: #FFFFFF;
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-miterlimit: 10;
-    }
-
-    .lttr {
-      fill: #0328fc;
-    }
-
-    .sound, .music {
-      position: fixed;
-      color: #763C8C;
-      font-size: 1.6rem;
-      text-decoration: underline;
-      cursor: default;
-      user-select: none;
-    }
-
-    .sound {
-      bottom: 1rem;
-      right: 1rem;
-    }
-
-    .music {
-      bottom: 3.5rem;
-      right: 1rem;
-    }
-
-    .sound--off, .music--off {
-      text-decoration: line-through;
-    }
-  </style>
+        @media (max-width: 600px) {
+            #mensaje-pequeno { top: 78%; padding: 0 10%; }
+            #play-btn { bottom: 15px; padding: 10px 20px; font-size: 0.95rem; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <svg class="svg-container" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200">
-    <line class="line line--left" x1="10" y1="17" x2="10" y2="183"></line>
-    <line class="line line--rght" x1="490" y1="17" x2="490" y2="183"></line>
-    <g>
-      <path class="lttr lttr--I" d="M42.2,73.9h11.4v52.1H42.2V73.9z"></path>
-      <path class="lttr lttr--L" d="M85.1,73.9h11.4v42.1h22.8v10H85.1V73.9z"></path>
-      <path class="lttr lttr--O" d="M123.9,100c0-15.2,11.7-26.9,27.2-26.9s27.2,11.7,27.2,26.9s-11.7,26.9-27.2,26.9S123.9,115.2,123.9,100zM166.9,100c0-9.2-6.8-16.5-15.8-16.5c-9,0-15.8,7.3-15.8,16.5s6.8,16.5,15.8,16.5C160.1,116.5,166.9,109.2,166.9,100z"></path>
-      <path class="lttr lttr--V" d="M180.7,73.9H193l8.4,22.9c1.7,4.7,3.5,9.5,5,14.2h0.1c1.7-4.8,3.4-9.4,5.2-14.3l8.6-22.8h11.7l-19.9,52.1h-11.5L180.7,73.9z"></path>
-      <path class="lttr lttr--E" d="M239.1,73.9h32.2v10h-20.7v10.2h17.9v9.5h-17.9v12.4H272v10h-33V73.9z"></path>
-      <path class="lttr lttr--Y" d="M315.8,102.5l-20.1-28.6H309l6.3,9.4c2,3,4.2,6.4,6.3,9.6h0.1c2-3.2,4.1-6.4,6.3-9.6l6.3-9.4h12.9l-19.9,28.5v23.6h-11.4V102.5z"></path>
-      <path class="lttr lttr--O2" d="M348.8,100c0-15.2,11.7-26.9,27.2-26.9c15.5,0,27.2,11.7,27.2,26.9s-11.7,26.9-27.2,26.9C360.5,126.9,348.8,115.2,348.8,100z M391.8,100c0-9.2-6.8-16.5-15.8-16.5c-9,0-15.8,7.3-15.8,16.5s6.8,16.5,15.8,16.5C385,116.5,391.8,109.2,391.8,100z"></path>
-      <path class="lttr lttr--U" d="M412.4,101.1V73.9h11.4v26.7c0,10.9,2.4,15.9,11.5,15.9c8.4,0,11.4-4.6,11.4-15.8V73.9h11v26.9c0,7.8-1.1,13.5-4,17.7c-3.7,5.3-10.4,8.4-18.7,8.4c-8.4,0-15.1-3.1-18.8-8.5C413.4,114.2,412.4,108.5,412.4,101.1z"></path>
-    </g>
-  </svg>
+    <div id="particles-js"></div>
+    <canvas id="corazones-canvas"></canvas>
+    <canvas id="letra-canvas"></canvas>
 
-  <div class="mo-container"></div>
-</div>
+    <div id="mensaje-pequeno">
+        Eres mi universo entero,<br>
+        mi paz, mi locura y mi hogar 💗
+    </div>
 
-<!-- Efectos de sonido originales -->
-<audio class="blup" style="display: none" preload="auto">
-  <source src="https://www.freesound.org/data/previews/265/265115_4373976-lq.mp3" type="audio/mpeg">
-</audio>
-<audio class="blop" style="display: none" preload="auto">
-  <source src="https://www.freesound.org/data/previews/265/265115_4373976-lq.mp3" type="audio/mpeg">
-</audio>
+    <button id="play-btn">Reproducir nuestra canción ♡</button>
 
-<!-- Canción de fondo romántica (loop, volumen bajo) -->
-<audio class="bg-music" loop preload="auto">
-  <source src="1.mp3" type="audio/mpeg">
-</audio>
+    <audio id="musica" loop preload="auto">
+        <source src="1.mp3" type="audio/mpeg">
+        Tu navegador no soporta audio :(
+    </audio>
 
-<div class="sound">sound fx on</div>
-<div class="music">music on</div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-<script>
-// ---------- JavaScript principal ----------
+    <script>
+        // ── Música ────────────────────────────────────────
+        const audio = document.getElementById("musica");
+        const playBtn = document.getElementById("play-btn");
 
-const qs = document.querySelector.bind(document);
-const easingHeart = mojs.easing.path('M0,100C2.9,86.7,33.6-7.3,46-7.3s15.2,22.7,26,22.7S89,0,100,0');
+        playBtn.addEventListener("click", () => {
+            audio.play().catch(e => console.log("Autoplay bloqueado:", e));
+            playBtn.style.opacity = "0.3";
+            playBtn.style.pointerEvents = "none";
+            setTimeout(() => playBtn.remove(), 5000);
+        });
 
-const el = {
-  container: qs('.mo-container'),
-  i: qs('.lttr--I'),
-  l: qs('.lttr--L'),
-  o: qs('.lttr--O'),
-  v: qs('.lttr--V'),
-  e: qs('.lttr--E'),
-  y: qs('.lttr--Y'),
-  o2: qs('.lttr--O2'),
-  u: qs('.lttr--U'),
-  lineLeft: qs('.line--left'),
-  lineRight: qs('.line--rght'),
-  colTxt: "#763c8c",
-  colHeart: "#fa4843",
-  blup: qs('.blup'),
-  blop: qs('.blop'),
-  sound: qs('.sound'),
-  music: qs('.music'),
-  bgMusic: qs('.bg-music')
-};
+        // ── Partículas de fondo rosas/moradas ──
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 180, density: { enable: true, value_area: 1000 } },
+                color: { value: ["#ff99cc", "#ff66b2", "#d7aaff", "#ffffff", "#ffccdd"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1.2, opacity_min: 0.1 } },
+                size: { value: 2.8, random: true },
+                line_linked: { enable: false },
+                move: {
+                    enable: true,
+                    speed: 0.8,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } },
+                modes: { grab: { distance: 180, line_linked: { opacity: 0.4 } } }
+            },
+            retina_detect: true
+        });
 
-class Heart extends mojs.CustomShape {
-  getShape() { return '<path d="M50,88.9C25.5,78.2,0.5,54.4,3.8,31.1S41.3,1.8,50,29.9c8.7-28.2,42.8-22.2,46.2,1.2S74.5,78.2,50,88.9z"/>'; }
-  getLength() { return 200; }
-}
-mojs.addShape('heart', Heart);
+        // ── Corazones flotantes ───────────────────────────────
+        const heartCanvas = document.getElementById("corazones-canvas");
+        const hCtx = heartCanvas.getContext("2d");
+        let hearts = [];
 
-const crtBoom = (delay = 0, x = 0, rd = 46) => {
-  const parent = el.container;
-  const crcl = new mojs.Shape({
-    shape: 'circle', fill: 'none', stroke: el.colTxt, strokeWidth: {5:0},
-    radius: {[rd]: [rd+20]}, easing: 'quint.out', duration: 500/3, parent, delay, x
-  });
-  const brst = new mojs.Burst({
-    radius: {[rd+15]:110}, angle: 'rand(60,180)', count: 3, timeline: {delay}, parent, x,
-    children: { radius: [5,3,7], fill: el.colTxt, scale: {1:0, easing:'quad.in'},
-      pathScale: [.8,null], degreeShift: ['rand(13,60)',null], duration: 1000/3, easing: 'quint.out' }
-  });
-  return [crcl, brst];
-};
+        function resizeCanvases() {
+            heartCanvas.width = window.innerWidth;
+            heartCanvas.height = window.innerHeight;
+            document.getElementById("letra-canvas").width = window.innerWidth;
+            document.getElementById("letra-canvas").height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvases);
+        resizeCanvases();
 
-const crtLoveTl = () => {
-  const move = 1000, boom = 200, easing = 'sin.inOut', easingBoom = 'sin.in', easingOut = 'sin.out';
-  const opts = { duration: move, easing, opacity: 1 };
-  const delta = 150;
+        class Heart {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * heartCanvas.width;
+                this.y = heartCanvas.height + 30;
+                this.size = Math.random() * 18 + 12;
+                this.speed = Math.random() * 1.2 + 0.6;
+                this.opacity = Math.random() * 0.5 + 0.4;
+                this.angle = Math.random() * Math.PI * 2;
+                this.wobble = Math.random() * 0.03 + 0.01;
+            }
+            update() {
+                this.y -= this.speed;
+                this.angle += this.wobble;
+                this.x += Math.sin(this.angle) * 1.5;
+                if (this.y < -30) this.reset();
+            }
+            draw() {
+                hCtx.save();
+                hCtx.globalAlpha = this.opacity;
+                hCtx.translate(this.x, this.y);
+                hCtx.rotate(this.angle);
+                hCtx.fillStyle = `hsl(${Math.random()*30 + 330}, 90%, 65%)`;
+                hCtx.beginPath();
+                hCtx.moveTo(0, -this.size/2);
+                hCtx.bezierCurveTo(this.size/2, -this.size, this.size, -this.size/3, 0, this.size/2);
+                hCtx.bezierCurveTo(-this.size, -this.size/3, -this.size/2, -this.size, 0, -this.size/2);
+                hCtx.fill();
+                hCtx.restore();
+            }
+        }
 
-  return new mojs.Timeline().add(
-    // ... (el resto del timeline se mantiene igual que en tu versión anterior)
-    // Para no alargar demasiado, asumo que copias aquí el contenido completo de crtLoveTl() de tu mensaje anterior
-    // Incluye todos los new mojs.Tween, Html, Shape y ...crtBoom
-    // Si lo necesitas completo dime y lo expando
-  );
-};
+        for (let i = 0; i < 18; i++) hearts.push(new Heart());
 
-const loveTl = crtLoveTl().play();
-setInterval(() => loveTl.replay(), 4300);
+        function animateHearts() {
+            hCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+            hearts.forEach(h => { h.update(); h.draw(); });
+            requestAnimationFrame(animateHearts);
+        }
+        animateHearts();
 
-const volume = 0.2;
-el.blup.volume = volume;
-el.blop.volume = volume;
+        // ── Partículas de texto (galaxia interactiva) ───────────────────────────────
+        const fondoParticles = [];
+        const fondoCount = 400;
+        let mouse = { x: -1000, y: -1000, radius: 140 };
 
-// Control de efectos de sonido
-const toggleSound = () => {
-  let on = true;
-  return () => {
-    on = !on;
-    el.blup.volume = on ? volume : 0;
-    el.blop.volume = on ? volume : 0;
-    el.sound.textContent = on ? 'sound fx on' : 'sound fx off';
-    el.sound.classList.toggle('sound--off', !on);
-  };
-};
-el.sound.addEventListener('click', toggleSound());
+        document.addEventListener("mousemove", e => {
+            const canvas = document.getElementById("letra-canvas");
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+        document.addEventListener("mouseleave", () => { mouse.x = -1000; mouse.y = -1000; });
 
-// Control de música de fondo
-const toggleMusic = () => {
-  let on = true;
-  el.bgMusic.volume = 0.15; // bajo para no tapar efectos
-  el.bgMusic.play().catch(() => {}); // autoplay puede requerir interacción
-  return () => {
-    on = !on;
-    if (on) {
-      el.bgMusic.play().catch(() => {});
-      el.music.textContent = 'music on';
-    } else {
-      el.bgMusic.pause();
-      el.music.textContent = 'music off';
-    }
-    el.music.classList.toggle('music--off', !on);
-  };
-};
-el.music.addEventListener('click', toggleMusic());
+        function initFondoParticles() {
+            fondoParticles.length = 0;
+            const canvas = document.getElementById("letra-canvas");
+            for (let i = 0; i < fondoCount; i++) {
+                fondoParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.7,
+                    vy: (Math.random() - 0.5) * 0.7,
+                    active: true
+                });
+            }
+        }
 
-</script>
+        const galaxyColors = [
+            [255, 105, 180], [173, 216, 230], [186, 85, 211],
+            [255, 182, 193], [138, 43, 226], [255, 255, 224],
+            [0, 191, 255], [255, 255, 255], [218, 112, 214]
+        ];
 
-<script>
-// ---------- Service Worker Registration ----------
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker registrado', reg))
-      .catch(err => console.log('Error al registrar Service Worker', err));
-  });
-}
-</script>
+        function randomGalaxyColor() {
+            const c = galaxyColors[Math.floor(Math.random() * galaxyColors.length)];
+            return `rgb(${c[0]},${c[1]},${c[2]})`;
+        }
 
+        function animateFondoParticles(ctx, width, height) {
+            for (const p of fondoParticles) {
+                if (!p.active) continue;
+                const mdx = p.x - mouse.x;
+                const mdy = p.y - mouse.y;
+                const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+                if (mdist < mouse.radius) {
+                    const force = (mouse.radius - mdist) / mouse.radius;
+                    const angle = Math.atan2(mdy, mdx);
+                    p.vx += Math.cos(angle) * force * 1.7;
+                    p.vy += Math.sin(angle) * force * 1.7;
+                }
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+                if (!p.color) p.color = randomGalaxyColor();
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.5;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function mostrarMensajePequeno() {
+            const mensaje = document.getElementById("mensaje-pequeno");
+            mensaje.style.opacity = "1";
+            mensaje.style.transform = "translateX(-50%) translateY(-30px)";
+        }
+
+        function drawWordParticles(textos) {
+            const canvas = document.getElementById("letra-canvas");
+            const ctx = canvas.getContext("2d");
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initFondoParticles();
+            }
+            resize();
+            window.addEventListener("resize", resize, { once: true });
+
+            let fontSize, density, particleRadius;
+            if (window.innerWidth <= 600) {
+                fontSize = canvas.width * 0.38 / textos.length;
+                density = 4;
+                particleRadius = 2.2;
+            } else {
+                fontSize = canvas.width * 0.28 / textos.length;
+                density = 6;
+                particleRadius = 2;
+            }
+
+            ctx.font = `bold ${fontSize}px Arial Rounded MT Bold, Arial, sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            const totalHeight = fontSize * textos.length * 1.1;
+            const startY = canvas.height / 2 - totalHeight / 2 + fontSize / 2;
+
+            const points = [];
+            for (let i = 0; i < textos.length; i++) {
+                const y = startY + i * fontSize * 1.1;
+                ctx.fillText(textos[i], canvas.width / 2, y);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                for (let yy = 0; yy < canvas.height; yy += density) {
+                    for (let xx = 0; xx < canvas.width; xx += density) {
+                        const idx = (yy * canvas.width + xx) * 4;
+                        if (imageData.data[idx + 3] > 128) {
+                            points.push({x: xx, y: yy});
+                        }
+                    }
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            while (fondoParticles.length < points.length) {
+                fondoParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: 0, vy: 0, active: true
+                });
+            }
+
+            for (let i = 0; i < fondoParticles.length; i++) {
+                if (i < points.length) {
+                    fondoParticles[i].tx = points[i].x;
+                    fondoParticles[i].ty = points[i].y;
+                    fondoParticles[i].active = true;
+                } else {
+                    fondoParticles[i].active = false;
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let moving = false;
+                for (const p of fondoParticles) {
+                    if (!p.active) continue;
+                    if (p.tx !== undefined && p.ty !== undefined) {
+                        const dx = p.tx - p.x;
+                        const dy = p.ty - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist > 0.1) moving = true;
+
+                        const mdx = p.x - mouse.x;
+                        const mdy = p.y - mouse.y;
+                        const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+                        if (mdist < mouse.radius) {
+                            const force = (mouse.radius - mdist) / mouse.radius;
+                            const angle = Math.atan2(mdy, mdx);
+                            p.vx += Math.cos(angle) * force * 1.7;
+                            p.vy += Math.sin(angle) * force * 1.7;
+                        }
+
+                        p.vx += dx * 0.006;
+                        p.vy += dy * 0.006;
+                        p.vx *= 0.96;
+                        p.vy *= 0.96;
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        if (!p.color) p.color = randomGalaxyColor();
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, particleRadius, 0, 2 * Math.PI);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                    }
+                }
+                if (moving) requestAnimationFrame(animate);
+                else mostrarMensajePequeno();
+            }
+
+            let fondoFrames = 0;
+            function fondoLoop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                animateFondoParticles(ctx, canvas.width, canvas.height);
+                fondoFrames++;
+                if (fondoFrames < 160) requestAnimationFrame(fondoLoop);
+                else animate();
+            }
+            fondoLoop();
+        }
+
+        function morphWordParticles(textosA, textosB, opciones = {}) {
+            const canvas = document.getElementById("letra-canvas");
+            const ctx = canvas.getContext("2d");
+
+            function getPointsFromText(textos, fontScale = 0.18) {
+                let scale = fontScale;
+                let density = 6;
+                if (window.innerWidth <= 600) {
+                    scale = fontScale * 2.1;
+                    density = 4;
+                } else {
+                    scale = fontScale * 1.5;
+                }
+                const fontSize = canvas.width * scale / textos.length;
+                ctx.font = `bold ${fontSize}px Arial Rounded MT Bold, Arial, sans-serif`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                const totalHeight = fontSize * textos.length * 1.1;
+                const startY = canvas.height / 2 - totalHeight / 2 + fontSize / 2;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < textos.length; i++) {
+                    const y = startY + i * fontSize * 1.1;
+                    ctx.fillText(textos[i], canvas.width / 2, y);
+                }
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const points = [];
+                for (let y = 0; y < canvas.height; y += density) {
+                    for (let x = 0; x < canvas.width; x += density) {
+                        const idx = (y * canvas.width + x) * 4;
+                        if (imageData.data[idx + 3] > 128) points.push({x, y});
+                    }
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return points;
+            }
+
+            const pointsA = getPointsFromText(textosA, opciones.fontScaleA || 0.18);
+            const pointsB = getPointsFromText(textosB, opciones.fontScaleB || 0.10);
+
+            const maxPoints = Math.max(pointsA.length, pointsB.length);
+            while (fondoParticles.length < maxPoints) {
+                fondoParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: 0, vy: 0, active: true,
+                    color: randomGalaxyColor()
+                });
+            }
+
+            for (let i = 0; i < fondoParticles.length; i++) {
+                if (i < pointsA.length) {
+                    fondoParticles[i].x = Math.random() * canvas.width;
+                    fondoParticles[i].y = Math.random() * canvas.height;
+                    fondoParticles[i].tx = pointsA[i].x;
+                    fondoParticles[i].ty = pointsA[i].y;
+                    fondoParticles[i].active = true;
+                } else {
+                    fondoParticles[i].active = false;
+                }
+            }
+
+            let particleRadius = window.innerWidth <= 600 ? 2.2 : 2;
+
+            function animateToA() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let moving = false;
+                for (const p of fondoParticles) {
+                    if (!p.active) continue;
+                    const dx = p.tx - p.x;
+                    const dy = p.ty - p.y;
+                    if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) moving = true;
+
+                    const mdx = p.x - mouse.x;
+                    const mdy = p.y - mouse.y;
+                    const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+                    if (mdist < mouse.radius) {
+                        const force = (mouse.radius - mdist) / mouse.radius;
+                        const angle = Math.atan2(mdy, mdx);
+                        p.vx += Math.cos(angle) * force * 1.7;
+                        p.vy += Math.sin(angle) * force * 1.7;
+                    }
+
+                    p.vx += dx * 0.006;
+                    p.vy += dy * 0.006;
+                    p.vx *= 0.96;
+                    p.vy *= 0.96;
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, particleRadius, 0, 2 * Math.PI);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+                if (moving) requestAnimationFrame(animateToA);
+                else {
+                    setTimeout(() => {
+                        for (let i = 0; i < fondoParticles.length; i++) {
+                            if (i < pointsB.length) {
+                                fondoParticles[i].tx = pointsB[i].x;
+                                fondoParticles[i].ty = pointsB[i].y;
+                                fondoParticles[i].active = true;
+                            } else {
+                                fondoParticles[i].active = false;
+                            }
+                        }
+                        animateToB();
+                    }, 2200);
+                }
+            }
+
+            function animateToB() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let moving = false;
+                for (const p of fondoParticles) {
+                    if (!p.active) continue;
+                    const dx = p.tx - p.x;
+                    const dy = p.ty - p.y;
+                    if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) moving = true;
+
+                    const mdx = p.x - mouse.x;
+                    const mdy = p.y - mouse.y;
+                    const mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+                    if (mdist < mouse.radius) {
+                        const force = (mouse.radius - mdist) / mouse.radius;
+                        const angle = Math.atan2(mdy, mdx);
+                        p.vx += Math.cos(angle) * force * 1.7;
+                        p.vy += Math.sin(angle) * force * 1.7;
+                    }
+
+                    p.vx += dx * 0.006;
+                    p.vy += dy * 0.006;
+                    p.vx *= 0.96;
+                    p.vy *= 0.96;
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, particleRadius, 0, 2 * Math.PI);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+                if (moving) requestAnimationFrame(animateToB);
+            }
+
+            animateToA();
+        }
+
+        // ── Inicio ────────────────────────────────────────
+        document.addEventListener("DOMContentLoaded", () => {
+            morphWordParticles(
+                ["TE AMO", "MUCHO"],
+                ["ERES", "MI", "TODO"],
+                { fontScaleA: 0.26, fontScaleB: 0.22 }
+            );
+
+            setTimeout(() => {
+                document.getElementById("mensaje-pequeno").innerHTML =
+                    `TE AMO con todo mi corazón,<br>mi estrellita, mi vida, mi todo 💫💗`;
+                document.getElementById("mensaje-pequeno").style.opacity = "1";
+                document.getElementById("mensaje-pequeno").style.transform = "translateX(-50%) translateY(-30px)";
+            }, 8500);
+        });
+
+        // ── Service Worker ────────────────────────────────────────
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("/service-worker.js")
+                    .then(reg => console.log("Service Worker registrado", reg))
+                    .catch(err => console.log("Error al registrar SW", err));
+            });
+        }
+    </script>
 </body>
 </html>
